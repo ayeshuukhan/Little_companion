@@ -64,8 +64,11 @@ export function EmotionalHome({
       if (profile.soundEnabled) playLayered(moodData.sounds);
       // void textToSpeech.speak(chosen.spoken, { ...moodData.voice, voiceURI: profile.voiceURI });
 
-      void textToSpeech.speak(chosen.spoken, { ...moodData.voice, voiceURI: profile.voiceURI, language: chosen.language });
-      
+      // void textToSpeech.speak(chosen.spoken, { ...moodData.voice, voiceURI: profile.voiceURI, language: chosen.language });
+      void textToSpeech.speak(chosen.spoken, {
+      ...moodData.voice,
+      voiceURI: profile.voiceURI,
+      });
 
 
 
