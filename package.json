@@ -7,7 +7,7 @@
     "dev": "concurrently -n web,api -c blue,green \"vite\" \"node server/index.js\"",
     "web": "vite",
     "server": "node server/index.js",
-    "build": "npx tsc -b && vite build",
+    "build": "vite build",
 
     "preview": "vite preview"
   },
