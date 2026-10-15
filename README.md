@@ -1,4 +1,4 @@
-# little companion — an emotion-reactive writing space
+# little companion - an emotion-reactive writing space
 
 You write what's on your mind. The app decides — with exactly one small,
 swappable AI step — whether it feels happy or sad, then reacts with
