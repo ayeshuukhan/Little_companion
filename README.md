@@ -183,8 +183,8 @@ If you want to change how the AI detects emotions, open `server/index.js`.
 
 There are two main things you can edit:
 
-- **MODEL** – currently set to `claude-haiku-4-5-20251001`.
-- **System prompt** – tells the AI how to classify the message.
+- **MODEL**
+- **System prompt**
 
 For example, you can change the prompt to handle sarcasm differently or make it more strict when deciding between happy and sad.
 
