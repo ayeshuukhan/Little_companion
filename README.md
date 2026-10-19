@@ -1,160 +1,227 @@
-# little companion - an emotion-reactive writing space
+# Little Companion – An Emotion Based Writing App
 
-You write what's on your mind. The app decides — with exactly one small,
-swappable AI step — whether it feels happy or sad, then reacts with
-animation, sound, a spoken line, and a written response. Everything past
-the classification is deterministic and hard-coded; there's no chatbot and
-no conversation.
+Little Companion is a simple writing app where users can write whatever they feel or think about. The app reads the message and tries to understand if the user is feeling happy, sad, or neutral.
 
-```
-USER WRITES → AI CLASSIFIES (happy | sad | neutral) → UI REACTS
-```
+After checking the emotion, the app shows a reaction with animations, sound effects, a spoken line, and a written response. The response is already written in the code, so the app does not chat with the user like a chatbot.
 
-## Run it
+The main idea is pretty simple:
 
-**1. Install dependencies**
+**User writes something → AI checks the emotion → App shows a reaction**
+
+## How to Run the Project
+
+### 1. Install the dependencies
+
+Open the project folder in your terminal and run:
+
 ```bash
 npm install
 ```
 
-**2. Add your Anthropic API key** (this is what gives the app real
-understanding instead of keyword guessing)
+This will install all the packages needed to run the app.
 
-- Get a key at https://console.anthropic.com/settings/keys
-- Copy `.env.example` to a new file named `.env` in the project root
-- Paste your key in:
-  ```
-  ANTHROPIC_API_KEY=sk-ant-your-real-key-here
-  ```
+### 2. Add your Anthropic API key
 
-**3. Start it**
+To use the real AI classifier, you need an API key from Anthropic.
+
+- Go to https://console.anthropic.com/settings/keys
+- Create your API key.
+- Copy the `.env.example` file and rename the copy to `.env`.
+- Add your key like this:
+
+```env
+ANTHROPIC_API_KEY=sk-ant-your-real-key-here
+```
+
+Keep your API key inside the `.env` file. Don't put it in your frontend code because other people could access it.
+
+### 3. Start the app
+
+Run this command:
+
 ```bash
 npm run dev
 ```
-This starts both the classifier backend (port 3001) and the app (port
-5173) together. Open the printed `http://localhost:5173/` link.
 
-No key yet, or don't want to set one up? The app still runs —
-`npm run dev` works with no `.env` at all, it just falls back to a
-simple offline keyword classifier (see "How classification works" below).
+This starts both the backend server and the frontend app. The backend runs on port 3001 and the frontend runs on port 5173.
 
-## Project layout
+Open this link in your browser:
 
-```
+`http://localhost:5173/`
+
+If you don't have an API key yet, thats fine too. The app can still run with a basic offline classifier. It wont understand every message perfectly, but it works for simple cases.
+
+## Project Folder Structure
+
+Here is a quick look at the main files and what they do.
+
+```text
 server/
-  index.js              tiny backend: receives text, asks a real model to
-                          classify it, returns { emotion }. Your API key
-                          lives only here, never in the browser.
+  index.js
+```
 
+This file handles the backend part. It sends the user's text to the AI model and gets back an emotion result. The API key stays on the server.
+
+```text
 src/
   components/
-    EmotionalHome.tsx   the interface state machine (idle → processing → reaction)
-    WritingBox.tsx       the text input + "Tell me" button
-    UserMessage.tsx       displays what the user wrote, stays visible throughout
-    ProcessingState.tsx   the brief "Hmm... I got you." beat
-    HappyReaction.tsx     fireworks + a randomly-picked celebration line
-    SadReaction.tsx        hug animation + a randomly-picked comfort line
-    Fireworks.tsx           particle burst visual
-    HugAnimation.tsx        soft converging-arcs comfort visual
-    Onboarding.tsx          first-visit flow: welcome → pick a voice → pick a name
-    Settings.tsx             gear-icon modal: edit name, voice, theme, sound toggle
-    JournalSection.tsx      "Golden Moments" / "Let It Out" personal logs
-    StarField.tsx             twinkling star background
-    CosmicBackdrop.tsx        nebula glow + drifting planets
-    WindowFrame.tsx            glassy browser-chrome card wrapper
+    EmotionalHome.tsx
+    WritingBox.tsx
+    UserMessage.tsx
+    ProcessingState.tsx
+    HappyReaction.tsx
+    SadReaction.tsx
+    Fireworks.tsx
+    HugAnimation.tsx
+    Onboarding.tsx
+    Settings.tsx
+    JournalSection.tsx
+    StarField.tsx
+    CosmicBackdrop.tsx
+    WindowFrame.tsx
 
   services/
-    emotionDetector.ts   the ONE AI responsibility: classify text as happy/sad/neutral
-    textToSpeech.ts        speaks lines via the browser's SpeechSynthesis API
-    audioManager.ts        layers/plays the short sound-effect clips
-    voices.ts                lists available browser TTS voices for the pickers
-    storage.ts               localStorage: profile (name/voice/theme) + journal entries
+    emotionDetector.ts
+    textToSpeech.ts
+    audioManager.ts
+    voices.ts
+    storage.ts
 
   context/
-    ProfileContext.tsx    shares the loaded profile across the app
+    ProfileContext.tsx
 
   data/
-    responses.ts          every spoken/written line, affirmation, and theme lives here
+    responses.ts
 
-public/audio/            drop your .mp3 clips here (see public/audio/README.md)
+public/
+  audio/
 ```
 
-## How classification works
+The components folder contains the main screens and visual parts of the app. For example, `WritingBox.tsx` is where the user types a message, and `HappyReaction.tsx` and `SadReaction.tsx` handle the reactions.
 
-`src/services/emotionDetector.ts` tries two layers, in order:
+The services folder contains the logic for detecting emotions, playing sounds, speaking text, and saving user data.
 
-1. **Real model (default).** Sends the text to `server/index.js`, which
-   calls the Anthropic API with a small, fast model (`claude-haiku-4-5`)
-   and a prompt that asks it to judge the *whole message's* tone —
-   including sarcasm, mixed signals, and longer, less keyword-y writing —
-   not just spot individual words. This is what fixes cases the old
-   keyword approach missed, like a message that starts sad and turns
-   around by the end.
-2. **Local fallback.** If the server isn't running, has no API key, or
-   the request fails for any reason, it silently falls back to
-   `localHeuristicClassifier` — a dependency-free keyword/punctuation
-   scorer — so the app never breaks, it just gets less nuanced.
+The `responses.ts` file stores the written responses, spoken lines, affirmations, and theme related data.
 
-You'll see a console warning (`Remote classifier unavailable...`) when
-the fallback kicks in — that's expected if you haven't set up `.env` yet.
+## How Emotion Detection Works
 
-## What's new: variety, journals, and a first-run flow
+The app uses two ways to check the user's emotion.
 
-- **No more identical repeats.** Each mood now has 12 spoken/written pairs
-  in `src/data/responses.ts` (`responses.happy.variants` /
-  `responses.sad.variants`); one is picked at random per reaction via
-  `pickVariant()`. Add, remove, or edit lines there — every line is a
-  `{ spoken, written }` pair.
+### 1. AI based classification
 
-- **Golden Moments (happy) and Let It Out (sad).** Two personal journals,
-  reachable from small links under the writing box or from a "Go to ⟶"
-  button after a reaction. Writing an entry there is *not* run through the
-  emotion classifier — it's a private log, not a message — and every save
-  triggers a short spoken affirmation picked at random from
-  `sections.happy.affirmations` / `sections.sad.affirmations` in
-  `responses.ts`. Entries persist in `localStorage` and each has a small
-  trash icon to delete it.
+Normally, the app sends the user's message to the backend server. The server then calls the Anthropic API using the Claude Haiku 4.5 model.
 
-- **First-visit onboarding.** New users see a calm welcome screen, then
-  pick a voice (with a live preview), then choose what the app should call
-  them. This is saved to `localStorage` so it only happens once per
-  browser.
+The AI checks the full message and decides which category fits best:
 
-- **Settings (gear icon, top right).** Change your name, voice, theme
-  (Dusk / Sunrise / Midnight), and toggle sound effects at any time.
+- **Happy** – when the message sounds positive or joyful.
+- **Sad** – when the message sounds sad or emotionally low.
+- **Neutral** – when the message does not clearly fit either category.
 
-## Changing the classifier prompt or model
+It tries to understand the meaning of the whole message, not just a few words. For example, if someone starts their message feeling sad but ends it on a positive note, the AI can consider the full context.
 
-Both live in `server/index.js`:
-- `MODEL` — currently `claude-haiku-4-5-20251001` (fast, cheap, plenty
-  accurate for a 3-way classification).
-- The `system` prompt — tune this if you want it to weigh things
-  differently (e.g. stricter about sarcasm, or adding more emotion
-  categories — just remember to update the `VALID` set too, and the
-  `Emotion` type in `emotionDetector.ts`, and add matching entries in
-  `responses.ts`).
+### 2. Offline classification
 
-Want to point at a different provider entirely instead of Anthropic?
-Rewrite the `fetch` call inside the `/api/classify-emotion` route in
-`server/index.js` — the frontend only cares that the endpoint returns
-`{ emotion: "happy" | "sad" | "neutral" }`, so nothing else needs to change.
+If the server is not available, the API key is missing, or the request fails, the app uses a local classifier instead.
 
-## Upgrading the voice
+This classifier checks words and punctuation to make a basic guess about the emotion. It is not as smart as the real AI, but it helps the app keep working without an API connection.
 
-`textToSpeech.ts` wraps the browser's built-in `speechSynthesis` behind a
-small `TextToSpeechProvider` interface. To use a hosted voice provider
-later, implement the same interface (`speak`, `cancel`, `isAvailable`) and
-swap the `textToSpeech` export — nothing else in the app needs to know.
+You may see a warning in the console when the app switches to the offline mode. Thats normal if you haven't configured the API key.
 
-## Design notes
+## New Features
 
-- **Palette** shifts with mood: a dusk plum/charcoal base at idle, warm
-  coral/gold for the happy reaction, and cool lavender/indigo for the sad
-  one.
-- **Type**: Fraunces (display) for the big emotional beats, Inter (body)
-  for UI copy, and Caveat (script) for the spoken-line quote — it reads
-  like something said aloud rather than a system message.
-- **Signature element**: the breathing aura behind the writing box —
-  it's alive at idle, bursts into fireworks on happy, and settles into
-  slow converging rings on sad.
-- Respects `prefers-reduced-motion`.
+### Different responses every time
+
+The app has 12 response options for happy emotions and 12 for sad emotions. These are stored in `src/data/responses.ts`.
+
+Each response contains two parts:
+
+- `spoken` – the line that the app says out loud.
+- `written` – the text shown on the screen.
+
+The app picks one of the available responses randomly, so users don't get the exact same line every time.
+
+You can easily add your own lines or change the existing ones in `responses.ts`.
+
+### Personal Journals
+
+The app includes two small journal sections.
+
+**Golden Moments** is for saving happy memories or things that made the user feel good.
+
+**Let It Out** is for writing down feelings or things that are bothering the user.
+
+Journal entries are saved in the browser using `localStorage`. They are not sent to the AI classifier, because journaling is meant to be a personal space.
+
+Whenever a user saves an entry, the app also speaks a short affirmation. These lines are stored in `responses.ts`.
+
+Users can also delete their saved entries whenever they want.
+
+### First Time Setup
+
+When someone opens the app for the first time, they see a welcome screen.
+
+After that, they can choose a voice and preview how it sounds. Then they choose a name that the app will use when talking to them.
+
+These settings are saved in the browser, so the user doesn't need to set everything up again next time.
+
+### Settings
+
+There is a settings button in the top right corner of the app.
+
+From there, users can:
+
+- Change their name.
+- Select a different voice.
+- Switch between Dusk, Sunrise, and Midnight themes.
+- Turn sound effects on or off.
+
+This makes the app a bit more personal and lets users adjust it to their own preference.
+
+## Changing the AI Model or Prompt
+
+If you want to change how the AI detects emotions, open `server/index.js`.
+
+There are two main things you can edit:
+
+- **MODEL** – currently set to `claude-haiku-4-5-20251001`.
+- **System prompt** – tells the AI how to classify the message.
+
+For example, you can change the prompt to handle sarcasm differently or make it more strict when deciding between happy and sad.
+
+If you add more emotion categories, remember to update the `VALID` set, the `Emotion` type in `emotionDetector.ts`, and the matching responses in `responses.ts`. Otherwise, the app may not handle the new category properly.
+
+You can also use another AI provider instead of Anthropic. You only need to change the API request in the backend, as long as it still returns an emotion in the expected format.
+
+## Changing the Voice
+
+The app uses the browser's built-in Speech Synthesis API to read text out loud.
+
+The `textToSpeech.ts` file handles the speech functions, such as speaking a line, stopping the current speech, and checking if speech is available.
+
+If you want to use a different voice provider in the future, you can create a new provider with the same functions and replace the current one. The rest of the app should not need many changes.
+
+## Design and Appearance
+
+The app has a soft, space inspired design. It uses different colours and animations depending on the user's emotion.
+
+- **Dusk theme:** dark plum and charcoal colours for the normal screen.
+- **Happy reaction:** warm coral and golden colours, with fireworks and celebration effects.
+- **Sad reaction:** soft lavender and indigo colours, with a gentle hug animation.
+
+The app also uses three different fonts:
+
+- Fraunces for large headings.
+- Inter for normal text.
+- Caveat for spoken lines and quotes.
+
+One of the main design features is the glowing effect behind the writing box. It slowly moves when the app is idle, turns into fireworks for happy reactions, and shows soft moving rings for sad reactions.
+
+The app also supports the `prefers-reduced-motion` setting, so animations can be reduced for users who prefer less movement.
+
+## Final Thoughts
+
+Little Companion is made to be a small and friendly space where people can write their thoughts without needing to have a full conversation with an AI.
+
+The AI has only one main job, which is to classify the emotion of the user's message. Everything after that is controlled by the app itself, including the animations, sounds, spoken lines, and written responses.
+
+This keeps the project simple and makes it easier to update the responses, add new features, or change the AI model later on.
