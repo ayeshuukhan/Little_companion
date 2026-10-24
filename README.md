@@ -30,7 +30,7 @@ To use the real AI classifier, you need an API key from Anthropic.
 - Add your key like this:
 
 ```env
-ANTHROPIC_API_KEY=sk-ant-your-real-key-here
+ANTHROPIC_API_KEY= (Put your key here)
 ```
 
 Keep your API key inside the `.env` file. Don't put it in your frontend code because other people could access it.
