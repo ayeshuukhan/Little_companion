@@ -7,11 +7,19 @@
 // but shaped as a small interface so a hosted voice provider can be
 // dropped in later without touching any component.
 
+// export interface SpeakOptions {
+//   rate?: number;
+//   pitch?: number;
+//   volume?: number;
+//   voiceURI?: string | null;
+// }
+
 export interface SpeakOptions {
-  rate?: number;
-  pitch?: number;
-  volume?: number;
-  voiceURI?: string | null;
+  rate?: number; // 0.1 - 10, 1 is normal
+  pitch?: number; // 0 - 2, 1 is normal
+  volume?: number; // 0 - 1
+  voiceURI?: string | null; // picked in Onboarding / Settings, matched against speechSynthesis.getVoices()
+  language?: string; // "en" | "roman-urdu" — currently informational only, doesn't change the voice
 }
 
 export interface TextToSpeechProvider {
