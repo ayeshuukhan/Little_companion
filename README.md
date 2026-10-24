@@ -1,4 +1,4 @@
-# Little Companion – An Emotion Based Writing App
+## Little Companion
 
 Little Companion is a simple writing app where users can write whatever they feel or think about. The app reads the message and tries to understand if the user is feeling happy, sad, or neutral.
 
@@ -217,11 +217,3 @@ The app also uses three different fonts:
 One of the main design features is the glowing effect behind the writing box. It slowly moves when the app is idle, turns into fireworks for happy reactions, and shows soft moving rings for sad reactions.
 
 The app also supports the `prefers-reduced-motion` setting, so animations can be reduced for users who prefer less movement.
-
-## Final Thoughts
-
-Little Companion is made to be a small and friendly space where people can write their thoughts without needing to have a full conversation with an AI.
-
-The AI has only one main job, which is to classify the emotion of the user's message. Everything after that is controlled by the app itself, including the animations, sounds, spoken lines, and written responses.
-
-This keeps the project simple and makes it easier to update the responses, add new features, or change the AI model later on.
