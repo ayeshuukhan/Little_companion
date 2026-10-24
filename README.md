@@ -4,7 +4,7 @@ An AI-powered writing app that detects emotions (happy, sad, or neutral) and res
 
 ### Features
 
-- AI-based emotion detection using Claude Haiku 4.5
+- AI-based emotion detection
 - Offline emotion classification fallback
 - Animated emotional reactions
 - Text-to-speech and sound effects
