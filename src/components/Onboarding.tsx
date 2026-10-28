@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { getVoices, sortVoicesForPicker } from "../services/voices";
 import { textToSpeech } from "../services/textToSpeech";
 import { useProfile } from "../context/ProfileContext";
-import { StarField } from "./StarField";
-import { CosmicBackdrop } from "./CosmicBackdrop";
+import { AmbientBackground } from "./AmbientBackground";
+
 
 type Step = "welcome" | "voice" | "name";
 
@@ -47,13 +47,8 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
 
   return (
     // <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-dusk-950 px-6">
-      <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-base-charcoal px-6">
-      <StarField />
-      <CosmicBackdrop />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-bloom-500/25 via-hush-500/20 to-ember-500/20 blur-3xl animate-breathe"
-      />
+          <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-black px-6">
+      <AmbientBackground />
 
       <AnimatePresence mode="wait">
         {step === "welcome" && (
