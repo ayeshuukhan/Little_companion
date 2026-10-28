@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { getVoices, sortVoicesForPicker } from "../services/voices";
 import { textToSpeech } from "../services/textToSpeech";
 import { useProfile } from "../context/ProfileContext";
-import { themes } from "../data/responses";
+import { themes, characters } from "../data/responses";
+import { Companion } from "./Companion";
 
 const SAMPLE_LINE = "Hi, this is what I sound like.";
 
@@ -41,7 +42,7 @@ export function Settings({ onClose }: { onClose: () => void }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
         transition={{ duration: 0.25 }}
-        className="w-full max-w-md rounded-3xl border border-white/10 bg-dusk-900/95 p-6 shadow-2xl"
+          className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl border border-white/10 bg-black/95 p-6 shadow-2xl"
       >
         <div className="mb-5 flex items-center justify-between">
           <h2 className="font-display text-xl text-white">Settings</h2>
@@ -55,16 +56,47 @@ export function Settings({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="space-y-6">
+                    <div>
+            <label className="mb-2 block font-body text-sm text-white/60">Theme</label>
+            <div className="grid grid-cols-4 gap-2">
+              {themes.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => updateProfile({ theme: t.id })}
+                  className={`flex flex-col items-center gap-1.5 rounded-xl border px-2 py-3 text-center font-body text-xs leading-tight transition-colors ${
+                    profile.theme === t.id
+                      ? "border-ember-500/60 bg-ember-500/10 text-white"
+                      : "border-white/10 text-white/60 hover:bg-white/5"
+                  }`}
+                >
+                  <span
+                    className="h-5 w-5 rounded-full"
+                    style={{ backgroundColor: t.swatch, boxShadow: `0 0 12px ${t.swatch}` }}
+                  />
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div>
-            <label className="mb-2 block font-body text-sm text-white/60">
-              What should I call you?
-            </label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              onBlur={() => updateProfile({ name: name.trim() || "friend" })}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 font-body text-white placeholder:text-white/35 focus:border-ember-500/40 focus:outline-none"
-            />
+            <label className="mb-2 block font-body text-sm text-white/60">Companion</label>
+            <div className="grid grid-cols-3 gap-2">
+              {characters.map((c) => (
+                <button
+                  key={c.id}
+                  onClick={() => updateProfile({ character: c.id })}
+                  className={`flex flex-col items-center rounded-xl border px-2 py-3 font-body text-xs transition-colors ${
+                    profile.character === c.id
+                      ? "border-ember-500/60 bg-ember-500/10 text-white"
+                      : "border-white/10 text-white/60 hover:bg-white/5"
+                  }`}
+                >
+                  <Companion mood="idle" size={64} character={c.id} />
+                  <span className="mt-1">{c.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           <div>

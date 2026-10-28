@@ -16,21 +16,21 @@ export default {
           800: "#2b2140",
           700: "#3a2c54",
         },
-        ember: {
-          400: "#ff6fb5",
-          500: "#ff2d9b",
-          600: "#e0117f",
+                ember: {
+          400: "rgb(var(--ember-400) / <alpha-value>)",
+          500: "rgb(var(--ember-500) / <alpha-value>)",
+          600: "rgb(var(--ember-600) / <alpha-value>)",
         },
         bloom: {
-          400: "#ff9ed2",
-          500: "#ff4fae",
-          600: "#d6107a",
+          400: "rgb(var(--bloom-400) / <alpha-value>)",
+          500: "rgb(var(--bloom-500) / <alpha-value>)",
+          600: "rgb(var(--bloom-600) / <alpha-value>)",
         },
         hush: {
-          300: "#ffc2e2",
-          400: "#ff9ad0",
-          500: "#ff6fba",
-          600: "#e0489f",
+          300: "rgb(var(--hush-300) / <alpha-value>)",
+          400: "rgb(var(--hush-400) / <alpha-value>)",
+          500: "rgb(var(--hush-500) / <alpha-value>)",
+          600: "rgb(var(--hush-600) / <alpha-value>)",
         },
         base: {
           charcoal: "#0c0c12",

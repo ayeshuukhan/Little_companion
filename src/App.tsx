@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import { EmotionalHome } from "./components/EmotionalHome";
 import { JournalSection } from "./components/JournalSection";
 import { Onboarding } from "./components/Onboarding";
@@ -18,6 +19,10 @@ function AppShell() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
   const [onboarded, setOnboarded] = useState(profile.onboarded);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = profile.theme;
+  }, [profile.theme]);
 
   if (!onboarded) {
     return <Onboarding onComplete={() => setOnboarded(true)} />;

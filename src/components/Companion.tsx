@@ -1,20 +1,91 @@
 import { motion } from "framer-motion";
+import { useProfile } from "../context/ProfileContext";
+import { CharacterId } from "../data/responses";
 
 export type CompanionMood = "idle" | "processing" | "happy" | "sad";
 
 interface CompanionProps {
   mood?: CompanionMood;
   size?: number;
+  character?: CharacterId; // if not given, uses the character picked in Settings
 }
 
 const glowColor: Record<CompanionMood, string> = {
   idle: "#ffe3c2",
   processing: "#ffe3c2",
-  happy: "#ff7a59",
+  happy: "rgb(var(--ember-500))",
   sad: "#7c93b8",
 };
 
-export function Companion({ mood = "idle", size = 120 }: CompanionProps) {
+const INK = "#2b2140";
+const CREAM = "#fff3e0";
+const SKIN = "#ffe1cf";
+const GIRL_HAIR = "#3a2438";
+const BOY_HAIR = "#2a2a48";
+
+function Face({ mood }: { mood: CompanionMood }) {
+  return (
+    <>
+      {mood === "happy" && (
+        <>
+          <path d="M76 108 Q84 96 92 108" stroke={INK} strokeWidth="5" fill="none" strokeLinecap="round" />
+          <path d="M108 108 Q116 96 124 108" stroke={INK} strokeWidth="5" fill="none" strokeLinecap="round" />
+          <ellipse cx="70" cy="122" rx="8" ry="5" opacity="0.5" style={{ fill: "rgb(var(--ember-400))" }} />
+          <ellipse cx="130" cy="122" rx="8" ry="5" opacity="0.5" style={{ fill: "rgb(var(--ember-400))" }} />
+        </>
+      )}
+
+      {mood === "sad" && (
+        <>
+          <path d="M78 112 Q86 116 94 112" stroke={INK} strokeWidth="4" fill="none" strokeLinecap="round" />
+          <path d="M106 112 Q114 116 122 112" stroke={INK} strokeWidth="4" fill="none" strokeLinecap="round" />
+        </>
+      )}
+
+      {(mood === "idle" || mood === "processing") && (
+        <>
+          <motion.circle
+            cx="85"
+            cy="108"
+            r="5"
+            fill={INK}
+            animate={{ scaleY: [1, 1, 0.1, 1, 1] }}
+            transition={{ duration: 4, repeat: Infinity, times: [0, 0.92, 0.95, 0.98, 1] }}
+          />
+          <motion.circle
+            cx="115"
+            cy="108"
+            r="5"
+            fill={INK}
+            animate={{ scaleY: [1, 1, 0.1, 1, 1] }}
+            transition={{ duration: 4, repeat: Infinity, times: [0, 0.92, 0.95, 0.98, 1] }}
+          />
+          <ellipse cx="70" cy="122" rx="7" ry="4" opacity="0.25" style={{ fill: "rgb(var(--ember-400))" }} />
+          <ellipse cx="130" cy="122" rx="7" ry="4" opacity="0.25" style={{ fill: "rgb(var(--ember-400))" }} />
+        </>
+      )}
+
+      <path
+        d={
+          mood === "happy"
+            ? "M90 130 Q100 140 110 130"
+            : mood === "sad"
+            ? "M90 134 Q100 128 110 134"
+            : "M94 130 Q100 133 106 130"
+        }
+        stroke={INK}
+        strokeWidth="3"
+        fill="none"
+        strokeLinecap="round"
+      />
+    </>
+  );
+}
+
+export function Companion({ mood = "idle", size = 120, character }: CompanionProps) {
+  const { profile } = useProfile();
+  const who: CharacterId = character ?? profile.character ?? "bunny";
+
   const bodyAnim =
     mood === "happy"
       ? { y: [0, -14, 0] }
@@ -42,64 +113,63 @@ export function Companion({ mood = "idle", size = 120 }: CompanionProps) {
         transition={{ duration: mood === "happy" ? 1.2 : 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      <motion.svg viewBox="0 0 200 200" width={size} height={size} className="relative" animate={bodyAnim} transition={bodyTransition}>
-        <ellipse cx="72" cy="48" rx="16" ry="38" fill="#fff3e0" transform="rotate(-12 72 48)" />
-        <ellipse cx="128" cy="48" rx="16" ry="38" fill="#fff3e0" transform="rotate(12 128 48)" />
-        <ellipse cx="72" cy="52" rx="8" ry="26" fill={glowColor[mood]} opacity="0.5" transform="rotate(-12 72 52)" />
-        <ellipse cx="128" cy="52" rx="8" ry="26" fill={glowColor[mood]} opacity="0.5" transform="rotate(12 128 52)" />
-
-        <circle cx="100" cy="110" r="58" fill="#fff3e0" />
-
-        {mood === "happy" && (
+      <motion.svg
+        viewBox="0 0 200 200"
+        width={size}
+        height={size}
+        className="relative"
+        animate={bodyAnim}
+        transition={bodyTransition}
+      >
+        {/* ---------- behind the head ---------- */}
+        {who === "bunny" && (
           <>
-            <path d="M76 108 Q84 96 92 108" stroke="#2b2140" strokeWidth="5" fill="none" strokeLinecap="round" />
-            <path d="M108 108 Q116 96 124 108" stroke="#2b2140" strokeWidth="5" fill="none" strokeLinecap="round" />
-            <ellipse cx="70" cy="122" rx="8" ry="5" fill="#ff7a59" opacity="0.4" />
-            <ellipse cx="130" cy="122" rx="8" ry="5" fill="#ff7a59" opacity="0.4" />
+            <ellipse cx="72" cy="48" rx="16" ry="38" fill={CREAM} transform="rotate(-12 72 48)" />
+            <ellipse cx="128" cy="48" rx="16" ry="38" fill={CREAM} transform="rotate(12 128 48)" />
+            <ellipse cx="72" cy="52" rx="8" ry="26" opacity="0.5" transform="rotate(-12 72 52)" style={{ fill: glowColor[mood] }} />
+            <ellipse cx="128" cy="52" rx="8" ry="26" opacity="0.5" transform="rotate(12 128 52)" style={{ fill: glowColor[mood] }} />
           </>
         )}
 
-        {mood === "sad" && (
+        {who === "girl" && (
           <>
-            <path d="M78 112 Q86 116 94 112" stroke="#2b2140" strokeWidth="4" fill="none" strokeLinecap="round" />
-            <path d="M106 112 Q114 116 122 112" stroke="#2b2140" strokeWidth="4" fill="none" strokeLinecap="round" />
+            <circle cx="36" cy="132" r="19" fill={GIRL_HAIR} />
+            <circle cx="164" cy="132" r="19" fill={GIRL_HAIR} />
           </>
         )}
 
-        {(mood === "idle" || mood === "processing") && (
+        {who === "boy" && (
           <>
-            <motion.circle
-              cx="85"
-              cy="108"
-              r="5"
-              fill="#2b2140"
-              animate={{ scaleY: [1, 1, 0.1, 1, 1] }}
-              transition={{ duration: 4, repeat: Infinity, times: [0, 0.92, 0.95, 0.98, 1] }}
-            />
-            <motion.circle
-              cx="115"
-              cy="108"
-              r="5"
-              fill="#2b2140"
-              animate={{ scaleY: [1, 1, 0.1, 1, 1] }}
-              transition={{ duration: 4, repeat: Infinity, times: [0, 0.92, 0.95, 0.98, 1] }}
-            />
+            <circle cx="42" cy="114" r="9" fill={SKIN} />
+            <circle cx="158" cy="114" r="9" fill={SKIN} />
           </>
         )}
 
-        <path
-          d={
-            mood === "happy"
-              ? "M90 130 Q100 140 110 130"
-              : mood === "sad"
-              ? "M90 134 Q100 128 110 134"
-              : "M94 130 Q100 133 106 130"
-          }
-          stroke="#2b2140"
-          strokeWidth="3"
-          fill="none"
-          strokeLinecap="round"
-        />
+        {/* ---------- head ---------- */}
+        <circle cx="100" cy="110" r="58" fill={who === "bunny" ? CREAM : SKIN} />
+
+        {/* ---------- hair / accessories ---------- */}
+        {who === "girl" && (
+          <>
+            <path d="M41 105 C34 30 166 30 159 105 C140 84 120 78 100 80 C80 78 60 84 41 105 Z" fill={GIRL_HAIR} />
+            <circle cx="46" cy="116" r="4.5" style={{ fill: "rgb(var(--ember-500))" }} />
+            <circle cx="154" cy="116" r="4.5" style={{ fill: "rgb(var(--ember-500))" }} />
+            <g transform="translate(64 60)">
+              <ellipse cx="-11" cy="-3" rx="11" ry="7" transform="rotate(-20 -11 -3)" style={{ fill: "rgb(var(--ember-500))" }} />
+              <ellipse cx="11" cy="-3" rx="11" ry="7" transform="rotate(20 11 -3)" style={{ fill: "rgb(var(--ember-500))" }} />
+              <circle cx="0" cy="-2" r="4.5" style={{ fill: "rgb(var(--ember-600))" }} />
+            </g>
+          </>
+        )}
+
+        {who === "boy" && (
+          <path
+            d="M41 100 C40 70 56 50 74 56 L80 36 L94 54 L104 32 L116 54 L128 38 L130 58 C150 54 164 76 159 100 C148 82 130 74 100 74 C70 74 52 82 41 100 Z"
+            fill={BOY_HAIR}
+          />
+        )}
+
+        <Face mood={mood} />
       </motion.svg>
 
       {mood === "processing" && (

@@ -4,13 +4,14 @@
 // artifact), so browser storage is the right tool here — it's what lets
 // the person's name, voice, theme, and journal entries survive a reload.
 
-import { Mood, ThemeId } from "../data/responses";
+import { Mood, ThemeId, CharacterId } from "../data/responses";
 
 export interface Profile {
   onboarded: boolean;
   name: string;
   voiceURI: string | null;
   theme: ThemeId;
+  character: CharacterId;
   soundEnabled: boolean;
 }
 
@@ -27,7 +28,8 @@ export const defaultProfile: Profile = {
   onboarded: false,
   name: "",
   voiceURI: null,
-  theme: "dusk",
+  theme: "pink",
+  character: "bunny",
   soundEnabled: true,
 };
 

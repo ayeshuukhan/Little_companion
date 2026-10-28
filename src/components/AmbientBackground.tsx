@@ -60,9 +60,9 @@ export function AmbientBackground({ mood = "idle" }: { mood?: BgMood }) {
             y2="0"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0" stopColor="#ff1f8e" />
-            <stop offset="0.5" stopColor="#ff4fae" />
-            <stop offset="1" stopColor="#ff8cc6" />
+            <stop offset="0" style={{ stopColor: "rgb(var(--ember-500))" }} />
+            <stop offset="0.5" style={{ stopColor: "rgb(var(--bloom-500))" }} />
+            <stop offset="1" style={{ stopColor: "rgb(var(--hush-400))" }} />
           </linearGradient>
         </defs>
 
@@ -98,7 +98,7 @@ export function AmbientBackground({ mood = "idle" }: { mood?: BgMood }) {
           {!reduceMotion && (
             <motion.path
               d={SHAPES[0]}
-              stroke="#ffd6ec"
+              style={{ stroke: "rgb(var(--hush-300))" }}
               strokeWidth="4"
               strokeLinecap="round"
               strokeDasharray="120 1800"

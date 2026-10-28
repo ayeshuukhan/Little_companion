@@ -707,40 +707,32 @@ export const copy = {
   againLabel: "Tell me something else",
 };
 
-// --- Themes -------------------------------------------------------------
-// Changeable from Settings. Only affects the idle/background mood, not
-// the semantic happy/sad reaction colors.
+// --- Themes & characters ------------------------------------------------
 
-export type ThemeId = "dusk" | "sunrise" | "midnight";
+export type ThemeId = "pink" | "purple" | "maroon" | "blue";
 
 export interface Theme {
   id: ThemeId;
   label: string;
-  bgClass: string;
-  auraClass: string;
-  textClass: string;
+  swatch: string;
 }
 
 export const themes: Theme[] = [
-  {
-    id: "dusk",
-    label: "Dusk",
-    bgClass: "bg-dusk-950",
-    auraClass: "from-ember-500/25 via-bloom-500/20 to-hush-500/25",
-    textClass: "text-white",
-  },
-  {
-    id: "sunrise",
-    label: "Sunrise",
-    bgClass: "bg-[#2b1f2a]",
-    auraClass: "from-ember-400/30 via-ember-500/20 to-bloom-400/25",
-    textClass: "text-white",
-  },
-  {
-    id: "midnight",
-    label: "Midnight",
-    bgClass: "bg-[#0b0e1a]",
-    auraClass: "from-hush-600/25 via-bloom-600/20 to-hush-400/20",
-    textClass: "text-white",
-  },
+  { id: "pink", label: "Hot Pink", swatch: "#ff2d9b" },
+  { id: "purple", label: "Purple", swatch: "#a855f7" },
+  { id: "maroon", label: "Maroon", swatch: "#c2264f" },
+  { id: "blue", label: "Electric Blue", swatch: "#1fa2ff" },
+];
+
+export type CharacterId = "bunny" | "girl" | "boy";
+
+export interface CharacterOption {
+  id: CharacterId;
+  label: string;
+}
+
+export const characters: CharacterOption[] = [
+  { id: "bunny", label: "Bunny" },
+  { id: "girl", label: "Girl" },
+  { id: "boy", label: "Boy" },
 ];
