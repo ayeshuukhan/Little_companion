@@ -35,9 +35,9 @@ export function WelcomePopup({ open, onClose }: { open: boolean; onClose: () => 
             </p>
 
             <p className="mt-4 font-body text-xs italic leading-relaxed text-[#ff8cc6]/80">
-              Dil bhaari ho to usay likh do, likhne ke baad kaafi behtar mehsoos hota
-              hai. Aur khushi ka lamha ho to usay likhna aur bhi acha hai — khud par
-              fakhar aur motivation barhta hai.
+              Sometimes, putting your feelings into words can make the weight feel lighter. 
+              And when something good happens, capture that moment too — it’s a little reminder 
+              of how far you’ve come and what makes you proud of yourself.
             </p>
 
             <div className="mt-5 flex items-center justify-center gap-3 font-body text-xs text-white/50">
